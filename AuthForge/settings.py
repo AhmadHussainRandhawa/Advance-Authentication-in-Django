@@ -47,7 +47,7 @@ ROOT_URLCONF = 'AuthForge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,3 +118,5 @@ AUTH_USER_MODEL = 'core_auth.User'
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/'  # or a dashboard path
