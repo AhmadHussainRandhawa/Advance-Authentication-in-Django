@@ -118,5 +118,5 @@ AUTH_USER_MODEL = 'core_auth.User'
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'core_auth:login'
 LOGIN_REDIRECT_URL = '/'  # or a dashboard path
