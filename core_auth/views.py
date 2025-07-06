@@ -5,12 +5,17 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.core.mail import send_mail
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 
 from .forms import RegistrationForm
 from .tokens import emailverificationtoken
+
+from django.contrib.auth.views import LoginView
+from django.utils.decorators import method_decorator
+from django_ratelimit.exceptions import Ratelimited
+from django_ratelimit.decorators import ratelimit
 
 User = get_user_model()
 
@@ -55,3 +60,25 @@ class ActivateAccountView(View):
         
         else: 
             return render(request, 'registration/register/activation_invalid.html')
+
+
+@method_decorator(ratelimit(key='ip', rate='5/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='ip', rate='30/m', method='GET', block=False), name='dispatch')
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    redirect_authenticated_user = True
+   
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            response = super().dispatch(request, *args, **kwargs)
+        except Ratelimited:
+            return render(request, 'ratelimited.html', status=429)
+
+        if request.method == 'GET' and getattr(request, 'limited', False):
+            return render(request, 'ratelimited.html', status=429)
+
+        return response
+    
+    # def get_success_url(self):
+    #     return reverse_lazy('dashboard')
+

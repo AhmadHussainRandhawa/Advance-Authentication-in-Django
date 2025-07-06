@@ -30,6 +30,8 @@ INSTALLED_APPS = [
 
     # My apps
     'core_auth',
+
+    'ratelimit'
 ]
 
 MIDDLEWARE = [

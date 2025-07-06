@@ -5,12 +5,12 @@ from django.contrib.auth.views import (
     PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
     )
-from .views import RegisterView, ActivateAccountView
+from .views import RegisterView, ActivateAccountView, CustomLoginView
 
 app_name = 'core_auth'
 
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('password-change/', PasswordChangeView.as_view(
         success_url=reverse_lazy('core_auth:password_change_done')), name='password_change'),
