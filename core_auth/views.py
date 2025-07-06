@@ -18,15 +18,15 @@ class RegisterView(View):
     
     def get(self, request):
         form = RegistrationForm()
-        return render(request, 'registration/register.html', {'form':form})
+        return render(request, 'registration/register/register.html', {'form':form})
 
     def post(self, request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             self.send_activation_email(request, user)
-            return render(request, 'registration/register_pending.html')
-        return render(request, 'registration/register.html', {'form': form})
+            return render(request, 'registration/register/register_pending.html')
+        return render(request, 'registration/register/register.html', {'form': form})
 
     def send_activation_email(self, request, user):        
         uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -37,7 +37,7 @@ class RegisterView(View):
         context = {'user':user, 'activation_link':activation_link}
 
         subject = "Activate your AuthForge Account"
-        message = render_to_string('registration/activation_email.html', context)
+        message = render_to_string('registration/register/activation_email.html', context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
 class ActivateAccountView(View):
@@ -51,7 +51,7 @@ class ActivateAccountView(View):
         if user and emailverificationtoken.check_token(user, token):
             user.is_active = True
             user.save()
-            return render(request, 'registration/activation_success.html')
+            return render(request, 'registration/register/activation_success.html')
         
         else: 
-            return render(request, 'registration/activation_invalid.html')
+            return render(request, 'registration/register/activation_invalid.html')
