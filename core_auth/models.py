@@ -3,6 +3,7 @@ from .managers import CustomUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.conf import settings
 
 class User(AbstractUser):
     username = None
@@ -17,4 +18,18 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.email}"
+    
 
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta: 
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.email}'s Profile"
