@@ -5,6 +5,7 @@ from django.contrib.auth.views import (
     PasswordChangeView, PasswordChangeDoneView,
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
     )
+from .views import RegisterView, ActivateAccountView
 
 app_name = 'core_auth'
 
@@ -21,4 +22,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(
         success_url=reverse_lazy('core_auth:password_reset_complete')), name='password_reset_confirm'),
     path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    
+    path('register/', RegisterView.as_view(), name='register'),
+    path('activate/<uidb64>/<token>/', ActivateAccountView.as_view(), name='activate'),
 ]

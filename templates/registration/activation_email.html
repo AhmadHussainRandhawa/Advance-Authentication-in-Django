@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+Hi {{ user.username }},
+
+Thanks for signing up for AuthForge!
+
+Please click the link below to activate your account:
+{{ activation_link }}
+
+If you didn't sign up, you can ignore this email.
+
+— The AuthForge Team
+
+{% endblock content %}
