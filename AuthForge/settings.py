@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'two_factor.plugins.phonenumber',  # Optional: for SMS if needed later
     'two_factor.plugins.email',        # if you want email capability.
 
+    # libraries
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
@@ -117,8 +119,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
