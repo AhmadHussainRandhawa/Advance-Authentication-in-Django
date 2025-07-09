@@ -22,7 +22,7 @@
   {% endif %}
   
   {# Main multi-step login form (WizardView) #}
-  <form method="post" novalidate>
+  <form method="post" class="step-{{ wizard.steps.current }}" novalidate>
     {% csrf_token %}
     {{ wizard.management_form }}
 
@@ -37,6 +37,9 @@
         <div class="form-group">
           <label for="{{ field.id_for_label }}">{{ field.label }}</label>
           {{ field }}
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}    
           {% if field.errors %}
             <div class="error">
               {{ field.errors }}
