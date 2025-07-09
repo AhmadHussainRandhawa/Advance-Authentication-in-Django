@@ -9,13 +9,14 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, EmailAuthenticationForm, CustomAuthenticationTokenForm, CustomBackupTokenForm
 from .tokens import emailverificationtoken
 
-from django.contrib.auth.views import LoginView
 from django.utils.decorators import method_decorator
 from django_ratelimit.exceptions import Ratelimited
 from django_ratelimit.decorators import ratelimit
+
+from two_factor.views import LoginView
 
 User = get_user_model()
 
@@ -65,8 +66,13 @@ class ActivateAccountView(View):
 @method_decorator(ratelimit(key='ip', rate='5/m', method='POST', block=True), name='dispatch')
 @method_decorator(ratelimit(key='ip', rate='30/m', method='GET', block=False), name='dispatch')
 class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'
+    template_name = 'two_factor/core/login.html'
     redirect_authenticated_user = True
+    form_list = (
+        ('auth', EmailAuthenticationForm),
+        ('token', CustomAuthenticationTokenForm),
+        ('backup', CustomBackupTokenForm),
+    )
    
     def dispatch(self, request, *args, **kwargs):
         try:

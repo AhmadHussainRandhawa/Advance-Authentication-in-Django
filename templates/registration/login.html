@@ -10,5 +10,5 @@
     {{ form.as_p }}
     <button type="submit">Log In</button>
   </form>
-  {% comment %} <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p> {% endcomment %}
+  <p><a href="{% url 'core_auth:password_reset' %}">Forgot your password?</a></p>
 {% endblock %}
