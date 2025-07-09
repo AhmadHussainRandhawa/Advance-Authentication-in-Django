@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>{% block title %}Authentication{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
+
+    {% block head %}
+    {# Optional: Place for per-page styles, fonts, or custom head tags #}
+    {% endblock %}
 </head>
 <body>
-    {% block content %}{% endblock content %}
+
+    {% block layout %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    {% endblock %}
+
+    {% block scripts %}
+    {# Optional: For per-page JS or script includes #}
+    {% endblock %}
 </body>
 </html>

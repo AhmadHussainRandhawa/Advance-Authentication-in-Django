@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Auth • {% block page_title %}{% endblock %}{% endblock %}
+
+{% block layout %}
+<main>
+    <section style="display: flex; min-height: 100vh; align-items: center; justify-content: center;">
+        <div style="width: 100%; max-width: 400px; padding: 1rem;">
+            {% block content %}{% endblock %}
+        </div>
+    </section>
+</main>
+{% endblock %}

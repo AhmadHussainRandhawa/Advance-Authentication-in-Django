@@ -7,16 +7,16 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import get_user_model
-from django.contrib.auth import login
 
-from .forms import RegistrationForm, EmailAuthenticationForm, CustomAuthenticationTokenForm, CustomBackupTokenForm
+from .forms import RegistrationForm, EmailAuthenticationForm
 from .tokens import emailverificationtoken
 
 from django.utils.decorators import method_decorator
 from django_ratelimit.exceptions import Ratelimited
 from django_ratelimit.decorators import ratelimit
 
-from two_factor.views import LoginView
+from two_factor.views import LoginView as BasseLoginView
+from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
 
 User = get_user_model()
 
@@ -63,15 +63,15 @@ class ActivateAccountView(View):
             return render(request, 'registration/register/activation_invalid.html')
 
 
-@method_decorator(ratelimit(key='ip', rate='5/m', method='POST', block=True), name='dispatch')
-@method_decorator(ratelimit(key='ip', rate='30/m', method='GET', block=False), name='dispatch')
-class CustomLoginView(LoginView):
+# @method_decorator(ratelimit(key='ip', rate='5/m', method='POST', block=True), name='dispatch')
+# @method_decorator(ratelimit(key='ip', rate='30/m', method='GET', block=False), name='dispatch')
+class LoginView(BasseLoginView):
     template_name = 'two_factor/core/login.html'
     redirect_authenticated_user = True
     form_list = (
         ('auth', EmailAuthenticationForm),
-        ('token', CustomAuthenticationTokenForm),
-        ('backup', CustomBackupTokenForm),
+        ('token', AuthenticationTokenForm),
+        ('backup', BackupTokenForm),
     )
    
     def dispatch(self, request, *args, **kwargs):
@@ -84,7 +84,3 @@ class CustomLoginView(LoginView):
             return render(request, 'ratelimited.html', status=429)
 
         return response
-    
-    # def get_success_url(self):
-    #     return reverse_lazy('dashboard')
-
